@@ -37,40 +37,75 @@ export default function Chatbot() {
         // 2. PRIORITY: Specific Project Lookup (Check titles first!)
         // This allows "Tell me about PolicyPal" to match PolicyPal BEFORE "about" matches the bio.
         const allProjects = [portfolioData.projects.spotlight, ...portfolioData.projects.featured];
-        // We check if the input contains any project title
-        const specificProject = allProjects.find(p => text.includes(p.title.toLowerCase()));
+        const freelancingProjects = portfolioData.freelancing || [];
+        const allProjectsIncludingFreelance = [...allProjects, ...freelancingProjects];
 
-        if (specificProject) {
-            return `**${specificProject.title}** (${specificProject.category}):\n${specificProject.desc}\n\nTech Stack: ${specificProject.tech}`;
+        // Special check for Dosti Hip Hop Cafe (handles partial matches)
+        if (text.includes('dosti') || text.includes('hip hop') || (text.includes('cafe') && !text.includes('skill'))) {
+            const dostiProject = freelancingProjects.find(p => p.title.toLowerCase().includes('dosti'));
+            if (dostiProject) {
+                let response = `**${dostiProject.title}** (${dostiProject.category}):\n${dostiProject.desc}\n\nTech Stack: ${dostiProject.tech}`;
+                if (dostiProject.demo && dostiProject.demo !== '#') {
+                    response += `\n\n🔗 [Live Demo](${dostiProject.demo})`;
+                }
+                if (dostiProject.github) {
+                    response += ` | [GitHub](${dostiProject.github})`;
+                }
+                return response;
+            }
         }
 
-        // 3. Resume / Download
+        // We check if the input contains any project title
+        const specificProject = allProjectsIncludingFreelance.find(p => text.includes(p.title.toLowerCase()));
+
+        if (specificProject) {
+            let response = `**${specificProject.title}** (${specificProject.category}):\n${specificProject.desc}\n\nTech Stack: ${specificProject.tech}`;
+            if (specificProject.demo && specificProject.demo !== '#') {
+                response += `\n\n🔗 [Live Demo](${specificProject.demo})`;
+            }
+            if (specificProject.github) {
+                response += ` | [GitHub](${specificProject.github})`;
+            }
+            return response;
+        }
+
+        // 3. Freelancing Queries
+        if (['freelance', 'freelancing', 'client', 'hired', 'cafe', 'dosti'].some(w => text.includes(w))) {
+            if (freelancingProjects.length > 0) {
+                const project = freelancingProjects[0];
+                return `**Freelancing Work:**\n\n**${project.title}** - ${project.client}\n\n${project.desc}\n\nKey Features:\n${project.features.slice(0, 5).map(f => `• ${f}`).join('\n')}\n\nTech: ${project.tech}\n\n🔗 [Live Demo](${project.demo}) | [GitHub](${project.github})`;
+            }
+            return "Harish is available for freelance work! Ask about his projects or contact him for opportunities.";
+        }
+
+        // 4. Resume / Download
         if (['resume', 'cv', 'download', 'pdf'].some(w => text.includes(w))) {
             return `You can download Harish's resume directly from the Hero section, or [click here](${portfolioData.hero.resumeLink}) to view it.`;
         }
 
-        // 4. Contact Info
+        // 5. Contact Info
         if (['contact', 'email', 'phone', 'reach', 'address', 'mail'].some(w => text.includes(w))) {
             return `You can reach Harish via:\n📧 Email: ${portfolioData.contact.email}\n📞 Phone: ${portfolioData.contact.phone}\n📍 Location: ${portfolioData.contact.location}\nOr connect on [LinkedIn](${portfolioData.hero.socials.linkedin}).`;
         }
 
-        // 5. Skills Query
+        // 6. Skills Query
         if (['skill', 'stack', 'tech', 'tool', 'program', 'language'].some(w => text.includes(w))) {
             // Collect all skills
             const allSkills = portfolioData.skills.categories.flatMap(c => c.skills).slice(0, 10).join(', ');
             return `Harish is proficient in: **${allSkills}**, and more.\n\nKey areas: **Full-Stack Development**, **Data Analytics**, and **DevOps**.\nCheck the Skills section for the full visual breakdown!`;
         }
 
-        // 6. Specific Skill Lookup (e.g., "Does he know Python?")
+        // 7. Specific Skill Lookup (e.g., "Does he know Python?")
         const skillMatch = portfolioData.skills.marquee.find(s => text.includes(s.toLowerCase()));
         if (skillMatch) {
             return `Yes! Harish is experienced with **${skillMatch}**. It's one of his core skills used in his projects.`;
         }
 
-        // 7. General Project Questions (if specific project wasn't found)
+        // 8. General Project Questions (if specific project wasn't found)
         if (['project', 'work', 'built', 'portfolio', 'app'].some(w => text.includes(w)) && !text.includes('skill')) {
             const projectNames = allProjects.map(p => `• **${p.title}**`).join('\n');
-            return `Harish has built several impressive projects:\n${projectNames}\n\nAsk me about any specific one (e.g., "Tell me about PolicyPal")!`;
+            const freelanceNames = freelancingProjects.map(p => `• **${p.title}** (Freelance)`).join('\n');
+            return `Harish has built several impressive projects:\n${projectNames}\n\n**Freelancing:**\n${freelanceNames}\n\nAsk me about any specific one (e.g., "Tell me about Dosti Hip Hop Cafe")!`;
         }
 
         // 8. Education
@@ -155,8 +190,8 @@ export default function Chatbot() {
                             )}
                             <div
                                 className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap shadow-sm ${msg.type === 'user'
-                                        ? 'bg-cyan-600 text-white rounded-br-none'
-                                        : 'bg-slate-800 border border-slate-700 text-slate-200 rounded-bl-none'
+                                    ? 'bg-cyan-600 text-white rounded-br-none'
+                                    : 'bg-slate-800 border border-slate-700 text-slate-200 rounded-bl-none'
                                     }`}
                             >
                                 {/* Simple markdown parsing for bold and links */}

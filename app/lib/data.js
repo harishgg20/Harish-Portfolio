@@ -150,6 +150,33 @@ export const portfolioData = {
         ]
     },
 
+    freelancing: [
+        {
+            title: "Dosti Hip Hop Cafe",
+            client: "Dosti Hip Hop Cafe, Bengaluru",
+            category: "Freelance Project",
+            tech: "Next.js, Firebase, Tailwind CSS, PWA",
+            desc: "A complete cafe management system featuring a live QR-based digital menu, admin dashboard for real-time menu/order management, and PWA support for offline access.",
+            features: [
+                "QR Code-based digital menu for contactless ordering",
+                "Real-time menu management with Firebase backend",
+                "Admin dashboard for CRUD operations on menu items",
+                "Menu item badges (New, Popular, Spicy, Vegan)",
+                "Favorite items functionality for customers",
+                "Reorder button for repeat orders",
+                "Sales reports export for business analytics",
+                "PWA support for offline menu access",
+                "Multi-category menu organization",
+                "Responsive design for mobile and tablet"
+            ],
+            problem: "The cafe needed a modern, contactless ordering solution that allows customers to view the menu via QR codes while giving staff real-time control over menu items, pricing, and orders without technical expertise.",
+            solution: "I built a full-stack cafe management platform with Firebase for real-time data sync. The system features a customer-facing QR menu with categories and item details, an intuitive admin dashboard for menu CRUD operations, order tracking, and sales reports. PWA capabilities ensure the menu works offline for customers.",
+            github: "https://github.com/harishgg20/DostiHipHop",
+            demo: "https://dosticafe.vercel.app/",
+            status: "Completed"
+        }
+    ],
+
     education: {
         degrees: [
             { degree: "MCA (Master of Computer Applications)", school: "Sir M Visvesvaraya Institute of Technology", year: "Graduated" },
