@@ -1,6 +1,19 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Workflow, Loader2, Code2, ChevronRight, Eye, Github, ExternalLink, X, Lock } from 'lucide-react';
+import { Workflow, Loader2, Code2, ChevronRight, Eye, Github, ExternalLink, X, Lock, Briefcase } from 'lucide-react';
+
+const freelancingProjectsData = [
+    {
+        title: "Dosti Hip Hop Cafe",
+        category: "Freelance",
+        tech: "Next.js, Firebase, Tailwind CSS, PWA",
+        desc: "A complete cafe management system featuring a live QR-based digital menu, admin dashboard for real-time menu/order management, and PWA support for offline access.",
+        problem: "The cafe needed a modern, contactless ordering solution that allows customers to view the menu via QR codes while giving staff real-time control over menu items, pricing, and orders without technical expertise.",
+        solution: "I built a full-stack cafe management platform with Firebase for real-time data sync. The system features a customer-facing QR menu with categories and item details, an intuitive admin dashboard for menu CRUD operations, order tracking, and sales reports. PWA capabilities ensure the menu works offline for customers.",
+        github: "https://github.com/harishgg20/DostiHipHop",
+        demo: "https://dosticafe.vercel.app/"
+    }
+];
 
 const policyPalData = {
     title: "PolicyPal",
@@ -230,8 +243,8 @@ export default function Projects() {
                             key={category}
                             onClick={() => setActiveCategory(category)}
                             className={`px-6 py-2 rounded-full font-medium transition-all duration-300 border ${activeCategory === category
-                                    ? 'bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-                                    : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white'
+                                ? 'bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                                : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white'
                                 }`}
                         >
                             {category}
@@ -243,6 +256,43 @@ export default function Projects() {
                     {filteredProjects.map((project, index) => (
                         <ProjectCard key={index} project={project} onClick={() => setSelectedProject(project)} />
                     ))}
+                </div>
+
+                {/* Freelancing Projects Section */}
+                <div className="mt-20">
+                    <h3 className="text-xl font-bold text-violet-400 mb-6 flex items-center gap-3">
+                        <span className="p-2 bg-violet-900/30 rounded-lg"><Briefcase size={24} /></span>
+                        Freelancing Projects
+                    </h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {freelancingProjectsData.map((project, index) => (
+                            <div
+                                key={index}
+                                onClick={() => setSelectedProject(project)}
+                                className="group bg-gradient-to-br from-slate-800/50 to-violet-900/20 rounded-2xl overflow-hidden border border-violet-500/30 hover:border-violet-500/60 transition-all duration-300 hover:-translate-y-2 cursor-pointer relative"
+                            >
+                                <div className="h-48 bg-gradient-to-br from-violet-900/30 to-slate-800 relative group-hover:from-violet-800/40 group-hover:to-slate-700 transition-all duration-500 flex items-center justify-center overflow-hidden">
+                                    <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors" />
+                                    <Briefcase className="text-violet-500/50 group-hover:text-violet-400/70 transition-colors w-16 h-16" />
+                                    <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                        <span className="px-4 py-2 bg-violet-600 text-white rounded-full text-sm font-medium flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                                            <Eye size={16} /> View Case Study
+                                        </span>
+                                    </div>
+                                    <span className="absolute top-3 right-3 px-2 py-1 text-xs font-semibold bg-violet-500/20 text-violet-300 rounded-full border border-violet-500/30">
+                                        Client Work
+                                    </span>
+                                </div>
+                                <div className="p-6">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <h3 className="text-xl font-bold text-white group-hover:text-violet-400 transition-colors">{project.title}</h3>
+                                    </div>
+                                    <p className="text-slate-400 text-sm mb-4 line-clamp-3">{project.desc}</p>
+                                    <div className="text-xs text-violet-400 font-mono border-t border-violet-700/50 pt-4">{project.tech}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="mt-12 text-center">
